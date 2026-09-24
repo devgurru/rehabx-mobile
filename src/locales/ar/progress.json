@@ -1,0 +1,17 @@
+{
+  "progress": "التقدم",
+  "overall": "الكل",
+  "kpiImprovement": "تحسن المؤشرات",
+  "exerciseAdherence": "الالتزام بالتمارين",
+  "milestones": "المراحل",
+  "exercisesCompleted": "التمارين المكتملة",
+  "milestonesAchieved": "المراحل المنجزة",
+  "keyOutcomes": "النتائج الرئيسية",
+  "wayToTarget": "{{progress}}% من الطريق للهدف",
+  "baseline": "الأساس",
+  "current": "الحالي",
+  "target": "الهدف",
+  "weeklyExerciseSessions": "جلسات التمارين الأسبوعية",
+  "dashedLineDesc": "الخط المتقطع يوضح الجلسات المخطط لها أسبوعياً.",
+  "goals": "الأهداف"
+}

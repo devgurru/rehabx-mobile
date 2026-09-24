@@ -1,0 +1,25 @@
+{
+  "greetingMorning": "صباح الخير",
+  "greetingAfternoon": "مساء الخير",
+  "greetingEvening": "مساء الخير",
+  "there": "أهلاً",
+  "ageDiagnosis": "{{age}} سنوات · {{diagnosis}}",
+  "progress": "التقدم",
+  "programWeek": "{{name}} · الأسبوع {{current}} من {{total}}",
+  "programStartingSoon": "يبدأ البرنامج قريباً",
+  "todaysExercises": "تمارين اليوم",
+  "completedCount": "اكتمل {{completed}} من {{total}}",
+  "loading": "جاري التحميل…",
+  "allDone": "تم الانتهاء",
+  "continueExercises": "متابعة التمارين",
+  "viewTodaysProgram": "عرض برنامج اليوم",
+  "nextMilestoneWeek": "المرحلة القادمة · الأسبوع {{week}}",
+  "progressAtAGlance": "نظرة سريعة على التقدم",
+  "seeAll": "عرض الكل",
+  "targetPercentage": "الهدف {{target}}%",
+  "currentProgram": "البرنامج الحالي",
+  "notStarted": "لم يبدأ",
+  "sessionsWithClinician": "{{sessions}} جلسات في الأسبوع · مع {{clinician}}",
+
+  "Spastic Diplegia": "الشلل المزدوج التشنجي"
+}

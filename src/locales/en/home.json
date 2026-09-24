@@ -1,0 +1,25 @@
+{
+  "greetingMorning": "Good morning",
+  "greetingAfternoon": "Good afternoon",
+  "greetingEvening": "Good evening",
+  "there": "there",
+  "ageDiagnosis": "{{age}} years old · {{diagnosis}}",
+  "progress": "Progress",
+  "programWeek": "{{name}} · week {{current}} of {{total}}",
+  "programStartingSoon": "Program starting soon",
+  "todaysExercises": "Today’s exercises",
+  "completedCount": "{{completed}} of {{total}} completed",
+  "loading": "Loading…",
+  "allDone": "All done",
+  "continueExercises": "Continue exercises",
+  "viewTodaysProgram": "View today’s program",
+  "nextMilestoneWeek": "Next milestone · week {{week}}",
+  "progressAtAGlance": "Progress at a glance",
+  "seeAll": "See all",
+  "targetPercentage": "Target {{target}}%",
+  "currentProgram": "Current program",
+  "notStarted": "Not started",
+  "sessionsWithClinician": "{{sessions}} sessions per week · with {{clinician}}",
+
+  "Spastic Diplegia": "Spastic Diplegia"
+}

@@ -1,0 +1,17 @@
+{
+  "progress": "Progress",
+  "overall": "Overall",
+  "kpiImprovement": "KPI improvement",
+  "exerciseAdherence": "Exercise adherence",
+  "milestones": "Milestones",
+  "exercisesCompleted": "Exercises completed",
+  "milestonesAchieved": "Milestones achieved",
+  "keyOutcomes": "Key outcomes",
+  "wayToTarget": "{{progress}}% of the way to target",
+  "baseline": "Baseline",
+  "current": "Current",
+  "target": "Target",
+  "weeklyExerciseSessions": "Weekly exercise sessions",
+  "dashedLineDesc": "Dashed line shows the planned sessions per week.",
+  "goals": "Goals"
+}

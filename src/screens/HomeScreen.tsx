@@ -1,6 +1,7 @@
 import { Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { StyleSheet, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { usePatient, usePatientKpis, useTodayExercises } from '@/api/queries';
 import { AppText } from '@/components/AppText';
 import { Badge, ExerciseStatusBadge, SpecialtyChip } from '@/components/Badge';
@@ -21,6 +22,7 @@ export default function HomeScreen(props: TabScreenProps<'Home'>) {
 }
 
 function HomeContent({ childId, navigation }: TabScreenProps<'Home'> & { childId: string }) {
+  const { t } = useTranslation(['home', 'program', 'assessment', 'exercises', 'milestones']);
   const user = useAppSelector((s) => s.auth.user);
   const patient = usePatient(childId);
   const today = useTodayExercises(childId);
@@ -40,9 +42,9 @@ function HomeContent({ childId, navigation }: TabScreenProps<'Home'> & { childId
       <View style={styles.header}>
         <View>
           <AppText variant="caption" color={colors.textSecondary}>
-            {greeting()},
+            {new Date().getHours() < 12 ? t('greetingMorning') : new Date().getHours() < 17 ? t('greetingAfternoon') : t('greetingEvening')},
           </AppText>
-          <AppText variant="title">{user?.firstName ?? 'there'}</AppText>
+          <AppText variant="title">{user?.firstName ?? t('there')}</AppText>
         </View>
         <InitialsAvatar name={user?.displayName ?? ''} color={colors.primary} />
       </View>
@@ -60,7 +62,7 @@ function HomeContent({ childId, navigation }: TabScreenProps<'Home'> & { childId
               {p.firstName}
             </AppText>
             <AppText variant="body" color="rgba(255,255,255,0.85)">
-              {p.age} years old · {p.diagnosis.name}
+              {t('ageDiagnosis', { age: p.age, diagnosis: t(p.diagnosis.name) })}
             </AppText>
             {p.specialty && (
               <SpecialtyChip name={p.specialty.name} color={p.specialty.color} light />
@@ -73,15 +75,15 @@ function HomeContent({ childId, navigation }: TabScreenProps<'Home'> & { childId
             color="#FFFFFF"
             track="rgba(255,255,255,0.22)"
             textColor="#FFFFFF"
-            label="Progress"
+            label={t('progress')}
           />
         </View>
         <View style={styles.heroFooter}>
           <Feather name="calendar" size={14} color="rgba(255,255,255,0.85)" />
           <AppText variant="caption" color="rgba(255,255,255,0.9)">
             {p.program
-              ? `${p.program.name} · week ${p.program.currentWeek} of ${p.program.durationWeeks}`
-              : 'Program starting soon'}
+              ? t('programWeek', { name: t(p.program.name), current: p.program.currentWeek, total: p.program.durationWeeks })
+              : t('programStartingSoon')}
           </AppText>
         </View>
       </LinearGradient>
@@ -89,12 +91,12 @@ function HomeContent({ childId, navigation }: TabScreenProps<'Home'> & { childId
       <Card>
         <View style={styles.rowBetween}>
           <View>
-            <AppText variant="heading">Today’s exercises</AppText>
+            <AppText variant="heading">{t('todaysExercises')}</AppText>
             <AppText variant="caption" color={colors.textSecondary}>
-              {today.data ? `${today.data.completed} of ${today.data.total} completed` : 'Loading…'}
+              {today.data ? t('completedCount', { completed: today.data.completed, total: today.data.total }) : t('loading')}
             </AppText>
           </View>
-          {allDone && <Badge label="All done" tone="success" icon="award" />}
+          {allDone && <Badge label={t('allDone')} tone="success" icon="award" />}
         </View>
         <ProgressBar
           value={
@@ -104,14 +106,14 @@ function HomeContent({ childId, navigation }: TabScreenProps<'Home'> & { childId
         {today.data?.items.map((item) => (
           <View key={item.id} style={styles.exerciseRow}>
             <AppText variant="bodyStrong" style={styles.flex}>
-              {item.exercise.name}
+              {t(item.exercise.name)}
             </AppText>
             <ExerciseStatusBadge status={item.status} />
           </View>
         ))}
         {nextExercise ? (
           <Button
-            title="Continue exercises"
+            title={t('continueExercises')}
             iconRight="arrow-right"
             onPress={() =>
               navigation.navigate('ExerciseDetail', { programExerciseId: nextExercise.id })
@@ -119,7 +121,7 @@ function HomeContent({ childId, navigation }: TabScreenProps<'Home'> & { childId
           />
         ) : (
           <Button
-            title="View today’s program"
+            title={t('viewTodaysProgram')}
             variant="secondary"
             onPress={() => navigation.navigate('Main', { screen: 'Exercises' })}
           />
@@ -137,9 +139,9 @@ function HomeContent({ childId, navigation }: TabScreenProps<'Home'> & { childId
             </View>
             <View style={styles.flex}>
               <AppText variant="caption" color={colors.textSecondary}>
-                Next milestone · week {p.nextMilestone.targetWeek}
+                {t('nextMilestoneWeek', { week: p.nextMilestone.targetWeek })}
               </AppText>
-              <AppText variant="subheading">{p.nextMilestone.title}</AppText>
+              <AppText variant="subheading">{t(p.nextMilestone.title)}</AppText>
             </View>
             <Feather name="chevron-right" size={20} color={colors.textMuted} />
           </View>
@@ -147,17 +149,17 @@ function HomeContent({ childId, navigation }: TabScreenProps<'Home'> & { childId
       )}
 
       <SectionHeader
-        title="Progress at a glance"
-        action="See all"
+        title={t('progressAtAGlance')}
+        action={t('seeAll')}
         onAction={() => navigation.navigate('Main', { screen: 'Progress' })}
       />
       <Card>
         {kpis.data?.map((k, i) => (
           <View key={k.id} style={[styles.kpiRow, i > 0 && styles.kpiDivider]}>
             <View style={styles.flex}>
-              <AppText variant="bodyStrong">{k.kpi.name}</AppText>
+              <AppText variant="bodyStrong">{t(k.kpi.name)}</AppText>
               <AppText variant="caption" color={colors.textSecondary}>
-                Target {Math.round(k.target)}%
+                {t('targetPercentage', { target: Math.round(k.target) })}
               </AppText>
             </View>
             <AppText variant="heading">{Math.round(k.current)}%</AppText>
@@ -181,12 +183,12 @@ function HomeContent({ childId, navigation }: TabScreenProps<'Home'> & { childId
           </View>
           <View style={styles.flex}>
             <AppText variant="caption" color={colors.textSecondary}>
-              Current program
+              {t('currentProgram')}
             </AppText>
-            <AppText variant="subheading">{p.program?.name ?? 'Not started'}</AppText>
+            <AppText variant="subheading">{p.program ? t(p.program.name) : t('notStarted')}</AppText>
             {p.program && (
               <AppText variant="caption" color={colors.textSecondary}>
-                {p.program.sessionsPerWeek} sessions per week · with {p.clinician.name}
+                {t('sessionsWithClinician', { sessions: p.program.sessionsPerWeek, clinician: p.clinician.name })}
               </AppText>
             )}
           </View>

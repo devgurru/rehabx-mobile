@@ -1,5 +1,6 @@
 import { Feather } from '@expo/vector-icons';
 import { StyleSheet, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { usePatientKpis, useProgress } from '@/api/queries';
 import { AppText } from '@/components/AppText';
 import { Card } from '@/components/Card';
@@ -20,6 +21,7 @@ function ProgressContent({
   childId,
   navigation,
 }: TabScreenProps<'Progress'> & { childId: string }) {
+  const { t } = useTranslation(['progress', 'home', 'program', 'assessment', 'exercises', 'milestones']);
   const progress = useProgress(childId);
   const kpis = usePatientKpis(childId);
   const refresh = () => void Promise.all([progress.refetch(), kpis.refetch()]);
@@ -30,15 +32,15 @@ function ProgressContent({
 
   return (
     <Screen onRefresh={refresh} refreshing={progress.isRefetching || kpis.isRefetching}>
-      <AppText variant="title">Progress</AppText>
+      <AppText variant="title">{t('progress')}</AppText>
 
       <Card style={styles.overall}>
-        <ProgressRing value={p.overall} size={132} stroke={11} label="Overall" />
+        <ProgressRing value={p.overall} size={132} stroke={11} label={t('overall')} />
         <View style={styles.breakdown}>
           {[
-            { label: 'KPI improvement', value: p.kpiAttainment },
-            { label: 'Exercise adherence', value: p.adherence },
-            { label: 'Milestones', value: p.milestoneCompletion },
+            { label: t('kpiImprovement'), value: p.kpiAttainment },
+            { label: t('exerciseAdherence'), value: p.adherence },
+            { label: t('milestones'), value: p.milestoneCompletion },
           ].map((b) => (
             <View key={b.label} style={styles.breakRow}>
               <View style={styles.breakHead}>
@@ -64,7 +66,7 @@ function ProgressContent({
             </AppText>
           </AppText>
           <AppText variant="caption" color={colors.textSecondary}>
-            Exercises completed
+            {t('exercisesCompleted')}
           </AppText>
         </Card>
         <Card
@@ -81,19 +83,19 @@ function ProgressContent({
             </AppText>
           </AppText>
           <AppText variant="caption" color={colors.textSecondary}>
-            Milestones achieved
+            {t('milestonesAchieved')}
           </AppText>
         </Card>
       </View>
 
-      <SectionHeader title="Key outcomes" />
+      <SectionHeader title={t('keyOutcomes')} />
       {kpis.data?.map((k) => (
         <Card key={k.id}>
           <View style={styles.kpiHead}>
             <View style={styles.flex}>
-              <AppText variant="subheading">{k.kpi.name}</AppText>
+              <AppText variant="subheading">{t(k.kpi.name)}</AppText>
               <AppText variant="caption" color={colors.textSecondary}>
-                {k.goalProgress}% of the way to target
+                {t('wayToTarget', { progress: k.goalProgress })}
               </AppText>
             </View>
             <View style={styles.delta}>
@@ -105,12 +107,12 @@ function ProgressContent({
           </View>
           <View style={styles.kpiValues}>
             {[
-              { label: 'Baseline', value: k.baseline, color: colors.textSecondary },
-              { label: 'Current', value: k.current, color: colors.text },
-              { label: 'Target', value: k.target, color: colors.textSecondary },
+              { label: t('baseline'), value: k.baseline, color: colors.textSecondary },
+              { label: t('current'), value: k.current, color: colors.text },
+              { label: t('target'), value: k.target, color: colors.textSecondary },
             ].map((v) => (
               <View key={v.label}>
-                <AppText variant={v.label === 'Current' ? 'title' : 'heading'} color={v.color}>
+                <AppText variant={v.label === t('current') ? 'title' : 'heading'} color={v.color}>
                   {Math.round(v.value)}%
                 </AppText>
                 <AppText variant="caption" color={colors.textSecondary}>
@@ -123,20 +125,20 @@ function ProgressContent({
         </Card>
       ))}
 
-      <SectionHeader title="Weekly exercise sessions" />
+      <SectionHeader title={t('weeklyExerciseSessions')} />
       <Card>
         <WeeklyBars
           data={p.weeklyAdherence.map((w) => ({ label: `W${w.week}`, value: w.completed }))}
           planned={p.weeklyAdherence[0]?.planned}
         />
         <AppText variant="caption" color={colors.textSecondary}>
-          Dashed line shows the planned sessions per week.
+          {t('dashedLineDesc')}
         </AppText>
       </Card>
 
       <SectionHeader
-        title="Goals"
-        action="Milestones"
+        title={t('goals')}
+        action={t('milestones')}
         onAction={() => navigation.navigate('Milestones')}
       />
       <Card>
@@ -144,7 +146,7 @@ function ProgressContent({
           <View key={g.id} style={styles.goal}>
             <View style={styles.breakHead}>
               <AppText variant="bodyStrong" style={styles.flex}>
-                {g.title}
+                {t(g.title)}
               </AppText>
               <AppText variant="bodyStrong">{g.progress}%</AppText>
             </View>
