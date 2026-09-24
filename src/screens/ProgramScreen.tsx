@@ -19,7 +19,7 @@ export default function ProgramScreen(props: TabScreenProps<'Program'>) {
 }
 
 function ProgramContent({ childId, navigation }: TabScreenProps<'Program'> & { childId: string }) {
-  const { t } = useTranslation('program');
+  const { t } = useTranslation(['program', 'assessment', 'exercises', 'milestones']);
   const program = useProgram(childId);
   const progress = useProgress(childId);
   const milestones = useMilestones(childId);

@@ -91,6 +91,7 @@ void i18n
     resources,
     fallbackLng: 'en',
     defaultNS: 'profile',
+    fallbackNS: ['profile', 'assessment', 'program', 'milestones', 'timeline', 'exercises', 'home', 'progress', 'login'],
     interpolation: {
       escapeValue: false, // React already escapes values
     },

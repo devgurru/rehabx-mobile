@@ -28,7 +28,7 @@ function ProfileContent({ childId, navigation }: TabScreenProps<'Profile'> & { c
   const user = useAppSelector((s) => s.auth.user);
   const dispatch = useAppDispatch();
   const queryClient = useQueryClient();
-  const { t, i18n } = useTranslation('profile');
+  const { t, i18n } = useTranslation(['profile', 'home', 'program', 'assessment', 'progress', 'exercises', 'milestones']);
 
   const handleLanguageChange = async (lang: string) => {
     await i18n.changeLanguage(lang);
@@ -87,8 +87,8 @@ function ProfileContent({ childId, navigation }: TabScreenProps<'Profile'> & { c
       </View>
 
       <Card>
-        <InfoRow label={t('diagnosis')} value={p.diagnosis.name} />
-        <InfoRow label={t('currentSpecialty')} value={p.specialty?.name ?? '—'} />
+        <InfoRow label={t('diagnosis')} value={t(p.diagnosis.name)} />
+        <InfoRow label={t('currentSpecialty')} value={p.specialty ? t(p.specialty.name) : '—'} />
         <InfoRow
           label={t('program')}
           value={
@@ -110,7 +110,7 @@ function ProfileContent({ childId, navigation }: TabScreenProps<'Profile'> & { c
               color={g.status === 'ACHIEVED' ? colors.success : colors.primary}
             />
             <AppText variant="bodyStrong" style={styles.flex}>
-              {g.title}
+              {t(g.title)}
             </AppText>
           </View>
         ))}
@@ -136,7 +136,7 @@ function ProfileContent({ childId, navigation }: TabScreenProps<'Profile'> & { c
       <SectionHeader title={t('caregiver')} />
       <Card>
         <InfoRow label={t('signedInAs')} value={user?.displayName ?? ''} />
-        <InfoRow label={t('relationship')} value={p.caregiver.relationship} />
+        <InfoRow label={t('relationship')} value={t(p.caregiver.relationship)} />
       </Card>
 
       <SectionHeader title={t('settings') || 'Settings'} />

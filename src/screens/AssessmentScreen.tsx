@@ -21,7 +21,7 @@ export default function AssessmentScreen() {
   const kpis = usePatientKpis(id);
   const program = useProgram(id);
 
-  const { t } = useTranslation('assessment');
+  const { t } = useTranslation(['assessment', 'program', 'exercises', 'milestones']);
 
   if (assessment.isPending) return <LoadingView />;
   if (assessment.error)

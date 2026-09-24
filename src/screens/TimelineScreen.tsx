@@ -55,7 +55,7 @@ const ICONS: Record<TimelineEventType, keyof typeof Feather.glyphMap> = {
 
 export default function TimelineScreen() {
   const { child } = useChild();
-  const { t } = useTranslation('timeline');
+  const { t } = useTranslation(['timeline', 'program', 'assessment', 'exercises', 'milestones']);
   const { data, isPending, error, refetch, isRefetching } = useTimeline(child?.id ?? '');
   if (isPending) return <LoadingView />;
   if (error) return <ErrorView error={error} onRetry={() => void refetch()} />;

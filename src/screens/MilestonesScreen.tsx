@@ -23,7 +23,7 @@ const dot: Record<
 
 export default function MilestonesScreen() {
   const { child } = useChild();
-  const { t } = useTranslation('milestones');
+  const { t } = useTranslation(['milestones', 'program', 'assessment', 'exercises']);
   const { data, isPending, error, refetch, isRefetching } = useMilestones(child?.id ?? '');
   if (isPending) return <LoadingView />;
   if (error) return <ErrorView error={error} onRetry={() => void refetch()} />;
