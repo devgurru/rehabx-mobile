@@ -25,8 +25,10 @@ export default function LoginScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [roleError, setRoleError] = useState<string | null>(null);
+  const [submitMode, setSubmitMode] = useState<'demo' | 'manual' | null>(null);
 
-  const submit = (credentials: { email: string; password: string }) => {
+  const submit = (credentials: { email: string; password: string }, mode: 'demo' | 'manual') => {
+    setSubmitMode(mode);
     setRoleError(null);
     login.mutate(credentials, {
       onSuccess: ({ accessToken, user }) => {
@@ -76,8 +78,9 @@ export default function LoginScreen() {
                 title="Continue as demo caregiver"
                 icon="heart"
                 iconRight="arrow-right"
-                loading={login.isPending}
-                onPress={() => submit(DEMO)}
+                loading={login.isPending && submitMode === 'demo'}
+                disabled={login.isPending}
+                onPress={() => submit(DEMO, 'demo')}
               />
               <View style={styles.divider}>
                 <View style={styles.line} />
@@ -105,7 +108,7 @@ export default function LoginScreen() {
                 value={password}
                 onChangeText={setPassword}
                 accessibilityLabel="Password"
-                onSubmitEditing={() => submit({ email, password })}
+                onSubmitEditing={() => submit({ email, password }, 'manual')}
               />
               {error && (
                 <View style={styles.error}>
@@ -118,8 +121,9 @@ export default function LoginScreen() {
               <Button
                 title="Sign in"
                 variant="secondary"
+                loading={login.isPending && submitMode === 'manual'}
                 disabled={!email || !password || login.isPending}
-                onPress={() => submit({ email, password })}
+                onPress={() => submit({ email, password }, 'manual')}
               />
               <AppText variant="caption" color={colors.textMuted} style={styles.center}>
                 Investor prototype · fictional demo data · not for clinical use
@@ -147,9 +151,9 @@ const styles = StyleSheet.create({
   },
   hero: { padding: spacing.xxl, paddingTop: spacing.xxxl * 1.5, gap: spacing.md },
   logo: {
-    width: 56,
-    height: 56,
-    borderRadius: 16,
+    width: 48,
+    height: 48,
+    borderRadius: 24,
     backgroundColor: '#FFFFFF',
     alignItems: 'center',
     justifyContent: 'center',
@@ -157,11 +161,11 @@ const styles = StyleSheet.create({
   },
   logoDot: {
     position: 'absolute',
-    right: 10,
-    bottom: 10,
-    width: 8,
-    height: 8,
-    borderRadius: 4,
+    right: 8,
+    bottom: 8,
+    width: 6,
+    height: 6,
+    borderRadius: 3,
     backgroundColor: colors.coral,
   },
   tagline: { maxWidth: 320 },
