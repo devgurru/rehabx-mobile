@@ -36,7 +36,7 @@ export default function MilestonesScreen() {
           {t('achievedOfTotal', { achieved: data.achieved, total: data.total })}
         </AppText>
         <AppText variant="body" color={colors.textSecondary}>
-          {t('weekOfDuration', { current: data.program.currentWeek, duration: data.program.durationWeeks, name: data.program.name })}
+          {t('weekOfDuration', { current: data.program.currentWeek, duration: data.program.durationWeeks, name: t(data.program.name) })}
         </AppText>
         <ProgressBar
           value={(data.achieved / Math.max(1, data.total)) * 100}
@@ -68,10 +68,10 @@ export default function MilestonesScreen() {
                   {t('weekUpper', { week: m.targetWeek })}
                   {m.targetDate ? ` · ${formatDate(m.targetDate).toUpperCase()}` : ''}
                 </AppText>
-                <AppText variant="subheading">{m.title}</AppText>
+                <AppText variant="subheading">{t(m.title)}</AppText>
                 {m.description && (
                   <AppText variant="caption" color={colors.textSecondary}>
-                    {m.description}
+                    {t(m.description ?? '')}
                   </AppText>
                 )}
                 <MilestoneStatusBadge status={m.status} />

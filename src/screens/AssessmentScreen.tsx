@@ -35,15 +35,15 @@ export default function AssessmentScreen() {
         <AppText variant="micro" color={colors.textSecondary}>
           {t('diagnosisUpper')}
         </AppText>
-        <AppText variant="heading">{child?.diagnosis.name}</AppText>
+        <AppText variant="heading">{t(child?.diagnosis.name ?? '')}</AppText>
         <AppText variant="body" color={colors.textSecondary}>
-          {a.summary}
+          {t(a.summary ?? '')}
         </AppText>
         <AppText variant="caption" color={colors.textMuted}>
           {t('assessedAtBy', { date: formatDate(a.assessedAt), name: a.assessedBy })}
         </AppText>
         {a.recommendedSpecialty && (
-          <SpecialtyChip name={a.recommendedSpecialty.name} color={a.recommendedSpecialty.color} />
+          <SpecialtyChip name={t(a.recommendedSpecialty.name)} color={a.recommendedSpecialty.color} />
         )}
       </Card>
 
@@ -57,7 +57,7 @@ export default function AssessmentScreen() {
           .map((d) => (
             <View key={d.key} style={styles.domain}>
               <View style={styles.domainHead}>
-                <AppText variant="bodyStrong">{d.label}</AppText>
+                <AppText variant="bodyStrong">{t(d.label)}</AppText>
                 <AppText variant="bodyStrong">{d.score}%</AppText>
               </View>
               <ProgressBar value={d.score ?? 0} height={6} color={colors.baseline} />
@@ -69,7 +69,7 @@ export default function AssessmentScreen() {
         <>
           <SectionHeader title={t('whatTheyCanDo')} />
           <Card>
-            <AppText variant="body">{a.currentAbilities}</AppText>
+            <AppText variant="body">{t(a.currentAbilities ?? '')}</AppText>
           </Card>
         </>
       )}
@@ -81,7 +81,7 @@ export default function AssessmentScreen() {
             {t('thingsToWatch')}
           </AppText>
         </View>
-        <AppText variant="body">{a.riskNotes}</AppText>
+        <AppText variant="body">{t(a.riskNotes ?? '')}</AppText>
       </View>
 
       <SectionHeader title={t('goals')} />
@@ -89,7 +89,7 @@ export default function AssessmentScreen() {
         {(program.data?.goals ?? []).map((g) => (
           <View key={g.id} style={styles.goal}>
             <Feather name="target" size={16} color={colors.primary} />
-            <AppText variant="bodyStrong">{g.title}</AppText>
+            <AppText variant="bodyStrong">{t(g.title)}</AppText>
           </View>
         ))}
       </Card>
@@ -99,7 +99,7 @@ export default function AssessmentScreen() {
         {kpis.data?.map((k) => (
           <View key={k.id} style={styles.measure}>
             <AppText variant="bodyStrong" style={styles.flex}>
-              {k.kpi.name}
+              {t(k.kpi.name)}
             </AppText>
             <AppText variant="caption" color={colors.textSecondary}>
               {Math.round(k.baseline)}% → {t('target')} {Math.round(k.target)}%

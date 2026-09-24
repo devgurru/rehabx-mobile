@@ -10,6 +10,39 @@ import { formatShortDate } from '@/lib/format';
 import type { TimelineEventType } from '@/lib/types';
 import { colors, spacing } from '@/theme';
 
+function translateDynamic(text: string, t: any): string {
+  if (!text) return '';
+  const direct = t(text);
+  if (direct && direct !== text) return direct;
+
+  let match;
+  match = text.match(/(\d+) of (\d+) exercises completed at home\./);
+  if (match) return t('exercisesCompletedAtHome', { completed: match[1], total: match[2] });
+
+  match = text.match(/(\d+) milestones over (\d+) weeks/);
+  if (match) return t('milestonesOverWeeks', { count: match[1], weeks: match[2] });
+
+  match = text.match(/(\d+) exercises assigned/);
+  if (match) return t('exercisesAssigned', { count: match[1] });
+
+  match = text.match(/Week (\d+) review — (.*?) (\d+)% \(baseline (\d+)%\)\./);
+  if (match) return t('kpiReviewFormat', { week: match[1], kpi: t(match[2]), val: match[3], base: match[4] });
+
+  match = text.match(/(.*?) referral created/);
+  if (match) return t('referralCreatedFormat', { specialty: t(match[1]) });
+
+  match = text.match(/^Milestone achieved: (.*)$/);
+  if (match) return t('milestoneAchievedFormat', { milestone: t(match[1]) });
+
+  match = text.match(/(.*?) · (\d+) weeks · (\d+) sessions per week/);
+  if (match) return t('programUpdatedFormat', { specialty: t(match[1]), weeks: match[2], sessions: match[3] });
+
+  if (text.includes(' · ')) return text.split(' · ').map(item => t(item)).join(' · ');
+  if (text.includes(', ')) return text.split(', ').map(item => t(item)).join('، ');
+
+  return text;
+}
+
 const ICONS: Record<TimelineEventType, keyof typeof Feather.glyphMap> = {
   ASSESSMENT: 'clipboard',
   REFERRAL: 'send',
@@ -42,10 +75,10 @@ export default function TimelineScreen() {
             {i < data.length - 1 && <View style={styles.line} />}
           </View>
           <View style={styles.body}>
-            <AppText variant="bodyStrong">{t(e.title)}</AppText>
+            <AppText variant="bodyStrong">{translateDynamic(e.title, t)}</AppText>
             {e.description && (
               <AppText variant="caption" color={colors.textSecondary}>
-                {t(e.description)}
+                {translateDynamic(e.description, t)}
               </AppText>
             )}
           </View>

@@ -3,6 +3,7 @@ import { StyleSheet, View } from 'react-native';
 import { colors, radius, spacing } from '@/theme';
 import type { MilestoneStatus, TodayStatus } from '@/lib/types';
 import { AppText } from './AppText';
+import { useTranslation } from 'react-i18next';
 
 export type Tone = 'success' | 'warning' | 'neutral' | 'brand' | 'coral';
 
@@ -72,9 +73,10 @@ const exerciseTone: Record<
   NOT_STARTED: { label: 'Not started', tone: 'neutral', icon: 'circle' },
 };
 
-export const ExerciseStatusBadge = ({ status }: { status: TodayStatus }) => (
-  <Badge {...exerciseTone[status]} />
-);
+export const ExerciseStatusBadge = ({ status }: { status: TodayStatus }) => {
+  const { t } = useTranslation('profile');
+  return <Badge {...exerciseTone[status]} label={t(exerciseTone[status].label)} />;
+};
 
 const milestoneTone: Record<
   MilestoneStatus,
@@ -85,9 +87,10 @@ const milestoneTone: Record<
   PENDING: { label: 'Upcoming', tone: 'neutral', icon: 'circle' },
 };
 
-export const MilestoneStatusBadge = ({ status }: { status: MilestoneStatus }) => (
-  <Badge {...milestoneTone[status]} />
-);
+export const MilestoneStatusBadge = ({ status }: { status: MilestoneStatus }) => {
+  const { t } = useTranslation('profile');
+  return <Badge {...milestoneTone[status]} label={t(milestoneTone[status].label)} />;
+};
 
 const styles = StyleSheet.create({
   badge: {

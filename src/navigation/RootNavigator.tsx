@@ -16,6 +16,7 @@ import ProgressScreen from '@/screens/ProgressScreen';
 import TimelineScreen from '@/screens/TimelineScreen';
 import { useAppSelector } from '@/store';
 import { colors, fonts } from '@/theme';
+import { useTranslation } from 'react-i18next';
 import type { RootStackParamList, TabParamList } from './types';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -30,6 +31,7 @@ const TAB_ICONS: Record<keyof TabParamList, keyof typeof Feather.glyphMap> = {
 };
 
 function MainTabs() {
+  const { t } = useTranslation('profile');
   return (
     <Tabs.Navigator
       screenOptions={({ route }) => ({
@@ -44,7 +46,7 @@ function MainTabs() {
       })}
     >
       <Tabs.Screen name="Home" component={HomeScreen} />
-      <Tabs.Screen name="Program" component={ProgramScreen} options={{ title: 'Plan' }} />
+      <Tabs.Screen name="Program" component={ProgramScreen} options={{ title: t('plan') || 'Plan' }} />
       <Tabs.Screen name="Exercises" component={ExercisesScreen} />
       <Tabs.Screen name="Progress" component={ProgressScreen} />
       <Tabs.Screen name="Profile" component={ProfileScreen} />
@@ -54,7 +56,8 @@ function MainTabs() {
 
 export function RootNavigator() {
   const status = useAppSelector((s) => s.auth.status);
-  if (status === 'restoring') return <LoadingView label="Opening RehabX…" />;
+  const { t } = useTranslation('profile');
+  if (status === 'restoring') return <LoadingView label={t('openingRehabX') || 'Opening RehabX…'} />;
 
   return (
     <Stack.Navigator
@@ -90,17 +93,17 @@ export function RootNavigator() {
           <Stack.Screen
             name="Milestones"
             component={MilestonesScreen}
-            options={{ title: 'Goals & milestones' }}
+            options={{ title: t('goalsAndMilestones') }}
           />
           <Stack.Screen
             name="Assessment"
             component={AssessmentScreen}
-            options={{ title: 'Assessment summary' }}
+            options={{ title: t('assessmentSummary') }}
           />
           <Stack.Screen
             name="Timeline"
             component={TimelineScreen}
-            options={{ title: 'Rehabilitation journey' }}
+            options={{ title: t('rehabilitationJourney') }}
           />
         </>
       )}

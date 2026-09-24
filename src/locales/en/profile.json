@@ -22,5 +22,12 @@
   "prototypeDisclaimer": "RehabX investor prototype · fictional demo data · not for clinical use",
   "yearsOld": "years old",
   "boy": "Boy",
-  "girl": "Girl"
+  "girl": "Girl",
+  "plan": "Plan",
+  "openingRehabX": "Opening RehabX…",
+  "Completed": "Completed",
+  "In progress": "In progress",
+  "Not started": "Not started",
+  "Achieved": "Achieved",
+  "Upcoming": "Upcoming"
 }

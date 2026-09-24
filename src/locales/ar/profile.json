@@ -22,5 +22,12 @@
   "prototypeDisclaimer": "النموذج الأولي للمستثمر RehabX · بيانات تجريبية خيالية · ليس للاستخدام السريري",
   "yearsOld": "سنة",
   "boy": "ولد",
-  "girl": "فتاة"
+  "girl": "فتاة",
+  "plan": "الخطة",
+  "openingRehabX": "جاري فتح RehabX…",
+  "Completed": "مكتمل",
+  "In progress": "قيد الإنجاز",
+  "Not started": "لم يبدأ",
+  "Achieved": "تم الإنجاز",
+  "Upcoming": "قادم"
 }
