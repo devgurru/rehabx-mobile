@@ -12,6 +12,8 @@ import enMilestones from './locales/en/milestones.json';
 import arMilestones from './locales/ar/milestones.json';
 import enTimeline from './locales/en/timeline.json';
 import arTimeline from './locales/ar/timeline.json';
+import enProgram from './locales/en/program.json';
+import arProgram from './locales/ar/program.json';
 
 const resources = {
   en: { 
@@ -19,12 +21,14 @@ const resources = {
     assessment: enAssessment,
     milestones: enMilestones,
     timeline: enTimeline,
+    program: enProgram,
   },
   ar: { 
     profile: arProfile,
     assessment: arAssessment,
     milestones: arMilestones,
     timeline: arTimeline,
+    program: arProgram,
   },
 };
 

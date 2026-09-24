@@ -1,5 +1,6 @@
 import { Feather } from '@expo/vector-icons';
 import { StyleSheet, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { useMilestones, useProgram, useProgress } from '@/api/queries';
 import { AppText } from '@/components/AppText';
 import { MilestoneStatusBadge, SpecialtyChip } from '@/components/Badge';
@@ -18,6 +19,7 @@ export default function ProgramScreen(props: TabScreenProps<'Program'>) {
 }
 
 function ProgramContent({ childId, navigation }: TabScreenProps<'Program'> & { childId: string }) {
+  const { t } = useTranslation('program');
   const program = useProgram(childId);
   const progress = useProgress(childId);
   const milestones = useMilestones(childId);
@@ -29,11 +31,11 @@ function ProgramContent({ childId, navigation }: TabScreenProps<'Program'> & { c
   if (!p)
     return (
       <Screen>
-        <AppText variant="title">Rehabilitation plan</AppText>
+        <AppText variant="title">{t('rehabilitationPlan')}</AppText>
         <EmptyView
           icon="clipboard"
-          title="Your plan is being prepared"
-          message="Your clinician will share the rehabilitation program here."
+          title={t('planBeingPrepared')}
+          message={t('planBeingPreparedMessage')}
         />
       </Screen>
     );
@@ -43,16 +45,16 @@ function ProgramContent({ childId, navigation }: TabScreenProps<'Program'> & { c
 
   return (
     <Screen onRefresh={refresh} refreshing={program.isRefetching}>
-      <AppText variant="title">Rehabilitation plan</AppText>
+      <AppText variant="title">{t('rehabilitationPlan')}</AppText>
 
       <Card>
-        <SpecialtyChip name={p.specialty.name} color={p.specialty.color} />
-        <AppText variant="heading">{p.name}</AppText>
+        <SpecialtyChip name={t(p.specialty.name)} color={p.specialty.color} />
+        <AppText variant="heading">{t(p.name)}</AppText>
         <View style={styles.stats}>
           {[
-            { icon: 'calendar' as const, label: 'Duration', value: `${p.durationWeeks} weeks` },
-            { icon: 'repeat' as const, label: 'Frequency', value: `${p.sessionsPerWeek}× / week` },
-            { icon: 'clock' as const, label: 'Started', value: formatDate(p.startDate) },
+            { icon: 'calendar' as const, label: t('duration'), value: t('weeksCount', { count: p.durationWeeks }) },
+            { icon: 'repeat' as const, label: t('frequency'), value: t('frequencyCount', { count: p.sessionsPerWeek }) },
+            { icon: 'clock' as const, label: t('started'), value: formatDate(p.startDate) },
           ].map((s) => (
             <View key={s.label} style={styles.stat}>
               <Feather name={s.icon} size={16} color={colors.primary} />
@@ -65,20 +67,20 @@ function ProgramContent({ childId, navigation }: TabScreenProps<'Program'> & { c
         </View>
         <View style={styles.weekRow}>
           <AppText variant="caption" color={colors.textSecondary}>
-            Week {p.currentWeek} of {p.durationWeeks}
+            {t('weekXofY', { current: p.currentWeek, total: p.durationWeeks })}
           </AppText>
         </View>
         <ProgressBar value={(p.currentWeek / p.durationWeeks) * 100} />
       </Card>
 
-      <SectionHeader title="Goals" />
+      <SectionHeader title={t('goals')} />
       <Card>
         {(progress.data?.goals ?? p.goals.map((g) => ({ ...g, progress: 0 }))).map((g) => (
           <View key={g.id} style={styles.goal}>
             <View style={styles.goalHead}>
               <Feather name="target" size={16} color={colors.primary} />
               <AppText variant="bodyStrong" style={styles.flex}>
-                {g.title}
+                {t(g.title)}
               </AppText>
               <AppText variant="bodyStrong">{g.progress}%</AppText>
             </View>
@@ -88,8 +90,8 @@ function ProgramContent({ childId, navigation }: TabScreenProps<'Program'> & { c
       </Card>
 
       <SectionHeader
-        title="Exercise schedule"
-        action="Today"
+        title={t('exerciseSchedule')}
+        action={t('today')}
         onAction={() => navigation.navigate('Main', { screen: 'Exercises' })}
       />
       <Card>
@@ -101,10 +103,10 @@ function ProgramContent({ childId, navigation }: TabScreenProps<'Program'> & { c
               </AppText>
             </View>
             <View style={styles.flex}>
-              <AppText variant="bodyStrong">{e.name}</AppText>
+              <AppText variant="bodyStrong">{t(e.name)}</AppText>
               <AppText variant="caption" color={colors.textSecondary}>
-                {e.reps ? `${e.reps} reps · ` : ''}
-                {e.durationMin} min · {e.frequencyPerWeek}× per week
+                {e.reps ? t('repsCount', { count: e.reps }) : ''}
+                {t('minFreq', { min: e.durationMin, freq: e.frequencyPerWeek })}
               </AppText>
             </View>
             {e.motionKey && (
@@ -120,18 +122,18 @@ function ProgramContent({ childId, navigation }: TabScreenProps<'Program'> & { c
       </Card>
 
       <SectionHeader
-        title="Milestones"
-        action="View all"
+        title={t('milestones')}
+        action={t('viewAll')}
         onAction={() => navigation.navigate('Milestones')}
       />
       <Card>
         {milestones.data?.items.map((m, i) => (
           <View key={m.id} style={[styles.exercise, i > 0 && styles.divider]}>
             <AppText variant="caption" color={colors.textSecondary} style={styles.week}>
-              Week {m.targetWeek}
+              {t('weekCount', { week: m.targetWeek })}
             </AppText>
             <AppText variant="bodyStrong" style={styles.flex}>
-              {m.title}
+              {t(m.title)}
             </AppText>
             <MilestoneStatusBadge status={m.status} />
           </View>
@@ -145,9 +147,9 @@ function ProgramContent({ childId, navigation }: TabScreenProps<'Program'> & { c
         <View style={styles.exercise}>
           <Feather name="file-text" size={20} color={colors.primary} />
           <View style={styles.flex}>
-            <AppText variant="bodyStrong">Assessment summary</AppText>
+            <AppText variant="bodyStrong">{t('assessmentSummary')}</AppText>
             <AppText variant="caption" color={colors.textSecondary}>
-              What your clinician found and why this plan was chosen
+              {t('assessmentSummaryDesc')}
             </AppText>
           </View>
           <Feather name="chevron-right" size={20} color={colors.textMuted} />
