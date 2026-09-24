@@ -1,6 +1,8 @@
 import { Feather } from '@expo/vector-icons';
+import { useTranslation } from 'react-i18next';
+import { I18nManager, Alert } from 'react-native';
 import { useQueryClient } from '@tanstack/react-query';
-import { Pressable, StyleSheet, View } from 'react-native';
+import { Pressable, StyleSheet, View, Switch } from 'react-native';
 import { usePatient, useProgram } from '@/api/queries';
 import { AppText } from '@/components/AppText';
 import { SpecialtyChip } from '@/components/Badge';
@@ -25,6 +27,19 @@ function ProfileContent({ childId, navigation }: TabScreenProps<'Profile'> & { c
   const user = useAppSelector((s) => s.auth.user);
   const dispatch = useAppDispatch();
   const queryClient = useQueryClient();
+  const { t, i18n } = useTranslation();
+
+  const handleLanguageChange = (lang: string) => {
+    void i18n.changeLanguage(lang);
+    const isRTL = lang === 'ar';
+    I18nManager.forceRTL(isRTL);
+    Alert.alert(
+      t('language'),
+      lang === 'ar' 
+        ? 'يرجى إعادة تشغيل التطبيق لتطبيق التغييرات.' 
+        : 'Please restart the app to apply layout changes.'
+    );
+  };
 
   if (patient.isPending) return <LoadingView />;
   if (patient.error)
@@ -115,6 +130,22 @@ function ProfileContent({ childId, navigation }: TabScreenProps<'Profile'> & { c
       <Card>
         <InfoRow label="Signed in as" value={user?.displayName ?? ''} />
         <InfoRow label="Relationship" value={p.caregiver.relationship} />
+      </Card>
+
+      <SectionHeader title={t('settings') || 'Settings'} />
+      <Card>
+        <View style={styles.link}>
+          <Feather name="globe" size={18} color={colors.primary} />
+          <AppText variant="bodyStrong" style={styles.flex}>
+            {t('language')}: {i18n.language === 'en' ? t('english') : t('arabic')}
+          </AppText>
+          <Switch
+            value={i18n.language === 'ar'}
+            onValueChange={(value) => handleLanguageChange(value ? 'ar' : 'en')}
+            trackColor={{ false: colors.border, true: colors.primary }}
+            thumbColor={'#ffffff'}
+          />
+        </View>
       </Card>
 
       <Button
