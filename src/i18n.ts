@@ -20,6 +20,8 @@ import enHome from './locales/en/home.json';
 import arHome from './locales/ar/home.json';
 import enProgress from './locales/en/progress.json';
 import arProgress from './locales/ar/progress.json';
+import enLogin from './locales/en/login.json';
+import arLogin from './locales/ar/login.json';
 
 const resources = {
   en: { 
@@ -31,6 +33,7 @@ const resources = {
     exercises: enExercises,
     home: enHome,
     progress: enProgress,
+    login: enLogin,
   },
   ar: { 
     profile: arProfile,
@@ -41,6 +44,7 @@ const resources = {
     exercises: arExercises,
     home: arHome,
     progress: arProgress,
+    login: arLogin,
   },
 };
 

@@ -10,6 +10,7 @@ import {
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useTranslation } from 'react-i18next';
 import { useLogin } from '@/api/queries';
 import { AppText } from '@/components/AppText';
 import { Button } from '@/components/Button';
@@ -20,6 +21,7 @@ import { colors, fonts, radius, spacing } from '@/theme';
 const DEMO = { email: 'caregiver@rehabx.demo', password: 'demo' };
 
 export default function LoginScreen() {
+  const { t } = useTranslation('login');
   const dispatch = useAppDispatch();
   const login = useLogin();
   const [email, setEmail] = useState('');
@@ -33,7 +35,7 @@ export default function LoginScreen() {
     login.mutate(credentials, {
       onSuccess: ({ accessToken, user }) => {
         if (user.role !== 'CAREGIVER') {
-          setRoleError('This app is for families. Clinicians use the RehabX web portal.');
+          setRoleError(t('errorClinician'));
           return;
         }
         void dispatch(signIn({ token: accessToken, user }));
@@ -67,15 +69,14 @@ export default function LoginScreen() {
                 RehabX
               </AppText>
               <AppText variant="body" color="rgba(255,255,255,0.85)" style={styles.tagline}>
-                Your child’s rehabilitation at home — guided, measured and shared with their care
-                team.
+                {t('tagline')}
               </AppText>
             </View>
 
             <View style={styles.sheet}>
-              <AppText variant="heading">Welcome</AppText>
+              <AppText variant="heading">{t('welcome')}</AppText>
               <Button
-                title="Continue as demo caregiver"
+                title={t('continueDemo')}
                 icon="heart"
                 iconRight="arrow-right"
                 loading={login.isPending && submitMode === 'demo'}
@@ -85,7 +86,7 @@ export default function LoginScreen() {
               <View style={styles.divider}>
                 <View style={styles.line} />
                 <AppText variant="caption" color={colors.textMuted}>
-                  or sign in
+                  {t('orSignIn')}
                 </AppText>
                 <View style={styles.line} />
               </View>
@@ -98,16 +99,16 @@ export default function LoginScreen() {
                 keyboardType="email-address"
                 value={email}
                 onChangeText={setEmail}
-                accessibilityLabel="Email"
+                accessibilityLabel={t('email')}
               />
               <TextInput
                 style={styles.input}
-                placeholder="Password"
+                placeholder={t('password')}
                 placeholderTextColor={colors.textMuted}
                 secureTextEntry
                 value={password}
                 onChangeText={setPassword}
-                accessibilityLabel="Password"
+                accessibilityLabel={t('password')}
                 onSubmitEditing={() => submit({ email, password }, 'manual')}
               />
               {error && (
@@ -119,14 +120,14 @@ export default function LoginScreen() {
                 </View>
               )}
               <Button
-                title="Sign in"
+                title={t('signIn')}
                 variant="secondary"
                 loading={login.isPending && submitMode === 'manual'}
                 disabled={!email || !password || login.isPending}
                 onPress={() => submit({ email, password }, 'manual')}
               />
               <AppText variant="caption" color={colors.textMuted} style={styles.center}>
-                Investor prototype · fictional demo data · not for clinical use
+                {t('disclaimer')}
               </AppText>
             </View>
           </ScrollView>
