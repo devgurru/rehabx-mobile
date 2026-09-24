@@ -1,5 +1,6 @@
 import { Feather } from '@expo/vector-icons';
 import { StyleSheet, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { useTodayExercises } from '@/api/queries';
 import { AppText } from '@/components/AppText';
 import { ExerciseStatusBadge } from '@/components/Badge';
@@ -19,6 +20,7 @@ function ExercisesContent({
   childId,
   navigation,
 }: TabScreenProps<'Exercises'> & { childId: string }) {
+  const { t } = useTranslation('exercises');
   const { data, isPending, error, refetch, isRefetching } = useTodayExercises(childId);
   if (isPending) return <LoadingView />;
   if (error) return <ErrorView error={error} onRetry={() => void refetch()} />;
@@ -26,11 +28,11 @@ function ExercisesContent({
   return (
     <Screen onRefresh={() => void refetch()} refreshing={isRefetching}>
       <View>
-        <AppText variant="title">Today’s program</AppText>
+        <AppText variant="title">{t('todaysProgram')}</AppText>
         <AppText variant="body" color={colors.textSecondary}>
           {data.total
-            ? `${data.completed} of ${data.total} exercises completed`
-            : 'No exercises assigned yet'}
+            ? t('exercisesCompleted', { completed: data.completed, total: data.total })
+            : t('noExercisesAssigned')}
         </AppText>
       </View>
       {data.total > 0 && <ProgressBar value={(data.completed / data.total) * 100} />}
@@ -38,8 +40,8 @@ function ExercisesContent({
       {data.items.length === 0 && (
         <EmptyView
           icon="activity"
-          title="Nothing scheduled"
-          message="Your clinician will assign exercises to your plan."
+          title={t('nothingScheduled')}
+          message={t('clinicianWillAssign')}
         />
       )}
 
@@ -62,15 +64,15 @@ function ExercisesContent({
                 )}
               </View>
               <View style={styles.body}>
-                <AppText variant="subheading">{item.exercise.name}</AppText>
+                <AppText variant="subheading">{t(item.exercise.name)}</AppText>
                 <View style={styles.meta}>
                   {item.reps !== null && (
                     <AppText variant="caption" color={colors.textSecondary}>
-                      {item.reps} repetitions
+                      {t('repetitionsCount', { count: item.reps })}
                     </AppText>
                   )}
                   <AppText variant="caption" color={colors.textSecondary}>
-                    {item.durationMin} minutes
+                    {t('minutesCount', { count: item.durationMin })}
                   </AppText>
                 </View>
                 <View style={styles.meta}>
@@ -79,7 +81,7 @@ function ExercisesContent({
                     <View style={styles.guide}>
                       <Feather name="box" size={12} color={colors.primary} />
                       <AppText variant="caption" color={colors.primary}>
-                        3D guide
+                        {t('3dGuide')}
                       </AppText>
                     </View>
                   )}

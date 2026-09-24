@@ -2,6 +2,7 @@ import { Feather } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { useCallback, useEffect, useRef } from 'react';
 import { Platform, Pressable, StyleSheet, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useCompleteExercise, useStartExercise, useTodayExercises } from '@/api/queries';
 import { useChild } from '@/api/useChild';
@@ -43,6 +44,7 @@ export default function ExerciseSessionScreen({
   const today = useTodayExercises(patientId);
   const start = useStartExercise(patientId);
   const complete = useCompleteExercise(patientId);
+  const { t } = useTranslation('exercises');
   const dispatch = useAppDispatch();
   const session = useAppSelector((s) => s.session);
   const item = today.data?.items.find((i) => i.id === programExerciseId);
@@ -87,11 +89,11 @@ export default function ExerciseSessionScreen({
     [dispatch, motion],
   );
 
-  if (today.isPending) return <LoadingView label="Preparing your session…" />;
+  if (today.isPending) return <LoadingView label={t('preparingSession')} />;
   if (!item)
     return (
       <ErrorView
-        error={today.error ?? new Error('Exercise not found')}
+        error={today.error ?? new Error(t('exerciseNotFound'))}
         onRetry={() => void today.refetch()}
       />
     );
@@ -137,7 +139,7 @@ export default function ExerciseSessionScreen({
           onPress={() => navigation.goBack()}
           style={styles.roundButton}
           accessibilityRole="button"
-          accessibilityLabel="Close session"
+          accessibilityLabel={t('closeSession')}
           hitSlop={8}
         >
           <Feather name="x" size={22} color={colors.text} />
@@ -145,7 +147,7 @@ export default function ExerciseSessionScreen({
         <View style={styles.aiPill}>
           <View style={styles.liveDot} />
           <AppText variant="caption" color={colors.primaryDark}>
-            AI coach · simulated
+            {t('aiCoachSimulated')}
           </AppText>
         </View>
         <Pressable
@@ -153,7 +155,7 @@ export default function ExerciseSessionScreen({
           style={[styles.roundButton, session.showSkeleton && styles.roundButtonActive]}
           accessibilityRole="switch"
           accessibilityState={{ checked: session.showSkeleton }}
-          accessibilityLabel="Show pose keypoints"
+          accessibilityLabel={t('showPoseKeypoints')}
           hitSlop={8}
         >
           <Feather
@@ -168,7 +170,7 @@ export default function ExerciseSessionScreen({
         <View style={styles.cue}>
           <Feather name="message-circle" size={16} color={colors.primary} />
           <AppText variant="bodyStrong">
-            {session.running ? (session.cue ?? 'Get ready…') : 'Paused'}
+            {session.running ? (session.cue ?? t('getReady')) : t('paused')}
           </AppText>
         </View>
       </View>
@@ -176,11 +178,11 @@ export default function ExerciseSessionScreen({
       <SafeAreaView edges={['bottom']} style={styles.sheet}>
         <View style={styles.sheetHead}>
           <View style={styles.flex}>
-            <AppText variant="heading">{item.exercise.name}</AppText>
+            <AppText variant="heading">{t(item.exercise.name)}</AppText>
             <View style={styles.formRow}>
               <Feather name="check-circle" size={14} color={colors.success} />
               <AppText variant="caption" color={colors.success}>
-                Form looks good
+                {t('formLooksGood')}
               </AppText>
             </View>
           </View>
@@ -197,7 +199,7 @@ export default function ExerciseSessionScreen({
         <View style={styles.metrics}>
           <View style={styles.metric}>
             <AppText variant="caption" color={colors.textSecondary}>
-              {targetReps ? 'Repetitions' : 'Holds'}
+              {targetReps ? t('repetitionsLabel') : t('holdsLabel')}
             </AppText>
             <AppText variant="title">
               {session.reps}
@@ -211,7 +213,7 @@ export default function ExerciseSessionScreen({
           </View>
           <View style={styles.metric}>
             <AppText variant="caption" color={colors.textSecondary}>
-              Time
+              {t('timeLabel')}
             </AppText>
             <AppText variant="title">
               {formatDuration(session.elapsedSec)}
@@ -227,7 +229,7 @@ export default function ExerciseSessionScreen({
         <View style={styles.soon}>
           <Feather name="camera" size={14} color={colors.textSecondary} />
           <AppText variant="caption" color={colors.textSecondary} style={styles.flex}>
-            Camera motion tracking is coming soon — today the coach counts along with the 3D guide.
+            {t('cameraMotionDesc')}
           </AppText>
         </View>
 
@@ -237,7 +239,7 @@ export default function ExerciseSessionScreen({
           </AppText>
         )}
         <Button
-          title={targetReached ? 'Great job — mark as complete' : 'Mark exercise complete'}
+          title={targetReached ? t('markAsCompleteGreat') : t('markAsComplete')}
           icon="check"
           variant={targetReached ? 'primary' : 'secondary'}
           loading={complete.isPending}

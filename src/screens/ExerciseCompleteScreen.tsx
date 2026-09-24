@@ -1,6 +1,7 @@
 import { Feather } from '@expo/vector-icons';
 import { useEffect, useState } from 'react';
 import { Animated, StyleSheet, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { AppText } from '@/components/AppText';
 import { Button } from '@/components/Button';
@@ -13,6 +14,7 @@ export default function ExerciseCompleteScreen({
   route,
   navigation,
 }: RootScreenProps<'ExerciseComplete'>) {
+  const { t } = useTranslation('exercises');
   const { result } = route.params;
   const [scale] = useState(() => new Animated.Value(0.6));
   const [ring, setRing] = useState(result.progress.before);
@@ -34,21 +36,21 @@ export default function ExerciseCompleteScreen({
         </Animated.View>
         <View style={styles.center}>
           <AppText variant="display" style={styles.text}>
-            {result.alreadyCompleted ? 'Already done today' : 'Exercise completed'}
+            {result.alreadyCompleted ? t('alreadyDoneToday') : t('exerciseCompleted')}
           </AppText>
           <AppText variant="body" color={colors.textSecondary} style={styles.text}>
             {allDone
-              ? 'Great work! Today’s program is complete.'
-              : 'Great work! Keep going with the next exercise.'}
+              ? t('greatWorkProgramComplete')
+              : t('greatWorkKeepGoing')}
           </AppText>
         </View>
 
         <Card style={styles.card}>
           <AppText variant="caption" color={colors.textSecondary}>
-            Today’s progress
+            {t('todaysProgress')}
           </AppText>
           <AppText variant="title">
-            {result.today.completed} / {result.today.total} exercises completed
+            {t('exercisesCompletedCount', { completed: result.today.completed, total: result.today.total })}
           </AppText>
           <ProgressBar
             value={(result.today.completed / Math.max(1, result.today.total)) * 100}
@@ -58,9 +60,9 @@ export default function ExerciseCompleteScreen({
 
         <View style={styles.row}>
           <Card style={[styles.card, styles.half]}>
-            <ProgressRing value={ring} size={96} stroke={8} label="Overall" />
+            <ProgressRing value={ring} size={96} stroke={8} label={t('overall')} />
             <AppText variant="caption" color={colors.textSecondary} style={styles.text}>
-              {gained > 0 ? `Up from ${result.progress.before}%` : 'Rehabilitation progress'}
+              {gained > 0 ? t('upFrom', { before: result.progress.before }) : t('rehabilitationProgress')}
             </AppText>
           </Card>
           {result.kpiUpdate && (
@@ -69,11 +71,11 @@ export default function ExerciseCompleteScreen({
                 <Feather name="trending-up" size={20} color={colors.success} />
               </View>
               <AppText variant="caption" color={colors.textSecondary}>
-                {result.kpiUpdate.kpiName}
+                {t(result.kpiUpdate.kpiName)}
               </AppText>
               <AppText variant="title">{Math.round(result.kpiUpdate.after)}%</AppText>
               <AppText variant="caption" color={colors.success}>
-                +{Math.round(result.kpiUpdate.after - result.kpiUpdate.before)} · target{' '}
+                +{Math.round(result.kpiUpdate.after - result.kpiUpdate.before)} · {t('target')}{' '}
                 {Math.round(result.kpiUpdate.target)}%
               </AppText>
             </Card>
@@ -83,12 +85,12 @@ export default function ExerciseCompleteScreen({
 
       <View style={styles.actions}>
         <Button
-          title="View progress"
+          title={t('viewProgress')}
           icon="trending-up"
           onPress={() => navigation.navigate('Main', { screen: 'Progress' })}
         />
         <Button
-          title="Back to exercises"
+          title={t('backToExercises')}
           variant="secondary"
           onPress={() => navigation.navigate('Main', { screen: 'Exercises' })}
         />

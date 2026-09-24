@@ -1,5 +1,6 @@
 import { Feather } from '@expo/vector-icons';
 import { StyleSheet, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { useTodayExercises } from '@/api/queries';
 import { useChild } from '@/api/useChild';
 import { AppText } from '@/components/AppText';
@@ -17,6 +18,7 @@ export default function ExerciseDetailScreen({
   route,
   navigation,
 }: RootScreenProps<'ExerciseDetail'>) {
+  const { t } = useTranslation('exercises');
   const { child } = useChild();
   const today = useTodayExercises(child?.id ?? '');
   const item = today.data?.items.find((i) => i.id === route.params.programExerciseId);
@@ -25,7 +27,7 @@ export default function ExerciseDetailScreen({
   if (today.error || !item)
     return (
       <ErrorView
-        error={today.error ?? new Error('Exercise not found')}
+        error={today.error ?? new Error(t('exerciseNotFound'))}
         onRetry={() => void today.refetch()}
       />
     );
@@ -38,26 +40,26 @@ export default function ExerciseDetailScreen({
       <ExerciseStage motionKey={e.motionKey} />
       <View style={styles.titleRow}>
         <View style={styles.flex}>
-          <AppText variant="title">{e.name}</AppText>
+          <AppText variant="title">{t(e.name)}</AppText>
           <AppText variant="body" color={colors.textSecondary}>
-            {e.description}
+            {t(e.description)}
           </AppText>
         </View>
       </View>
       <View style={styles.badges}>
         <ExerciseStatusBadge status={item.status} />
-        {e.motionKey && <Badge label="AI / 3D guide" tone="brand" icon="box" />}
+        {e.motionKey && <Badge label={t('ai3dGuide')} tone="brand" icon="box" />}
       </View>
 
       <View style={styles.stats}>
         {[
           {
             icon: 'repeat' as const,
-            label: 'Repetitions',
-            value: item.reps ? String(item.reps) : 'Hold',
+            label: t('repetitions'),
+            value: item.reps ? String(item.reps) : t('hold'),
           },
-          { icon: 'clock' as const, label: 'Duration', value: `${item.durationMin} min` },
-          { icon: 'calendar' as const, label: 'Per week', value: `${item.frequencyPerWeek}×` },
+          { icon: 'clock' as const, label: t('duration'), value: t('minCount', { count: item.durationMin }) },
+          { icon: 'calendar' as const, label: t('perWeek'), value: t('freqCount', { count: item.frequencyPerWeek }) },
         ].map((s) => (
           <View key={s.label} style={styles.stat}>
             <Feather name={s.icon} size={18} color={colors.primary} />
@@ -70,7 +72,7 @@ export default function ExerciseDetailScreen({
       </View>
 
       <Card>
-        <AppText variant="heading">How to do it</AppText>
+        <AppText variant="heading">{t('howToDoIt')}</AppText>
         {e.instructions.map((step, i) => (
           <View key={step} style={styles.step}>
             <View style={styles.stepNumber}>
@@ -79,7 +81,7 @@ export default function ExerciseDetailScreen({
               </AppText>
             </View>
             <AppText variant="body" style={styles.flex}>
-              {step}
+              {t(step)}
             </AppText>
           </View>
         ))}
@@ -89,12 +91,12 @@ export default function ExerciseDetailScreen({
         <View style={styles.safetyHead}>
           <Feather name="shield" size={18} color={colors.warning} />
           <AppText variant="subheading" color={colors.warning}>
-            Safety first
+            {t('safetyFirst')}
           </AppText>
         </View>
         {e.safetyNotes.map((note) => (
           <AppText key={note} variant="body">
-            • {note}
+            • {t(note)}
           </AppText>
         ))}
       </View>
@@ -104,11 +106,10 @@ export default function ExerciseDetailScreen({
           <Feather name="check-circle" size={22} color={colors.success} />
           <View style={styles.flex}>
             <AppText variant="subheading" color={colors.success}>
-              Completed today{item.completedAt ? ` at ${formatTime(item.completedAt)}` : ''}
+              {t('completedToday')}{item.completedAt ? t('atTime', { time: formatTime(item.completedAt) }) : ''}
             </AppText>
             <AppText variant="caption" color={colors.textSecondary}>
-              {item.totalCompleted} sessions completed so far. Practising again won’t be counted
-              twice.
+              {t('sessionsCompletedDesc', { count: item.totalCompleted })}
             </AppText>
           </View>
         </View>
@@ -117,10 +118,10 @@ export default function ExerciseDetailScreen({
       <Button
         title={
           done
-            ? 'Practise again'
+            ? t('practiseAgain')
             : item.status === 'IN_PROGRESS'
-              ? 'Resume exercise'
-              : 'Start exercise'
+              ? t('resumeExercise')
+              : t('startExercise')
         }
         icon="play"
         variant={done ? 'secondary' : 'primary'}
