@@ -1,0 +1,12 @@
+{
+  "noAssessmentYet": "لا يوجد تقييم بعد",
+  "diagnosisUpper": "التشخيص",
+  "assessedAtBy": "تم التقييم في {{date}} بواسطة {{name}}",
+  "startingPoint": "نقطة البداية",
+  "howWasDoingAtFirstAssessment": "كيف كان أداء {{name}} في التقييم الأول (0-100)",
+  "whatTheyCanDo": "ما يمكنهم فعله",
+  "thingsToWatch": "أشياء يجب مراقبتها",
+  "goals": "الأهداف",
+  "howWeMeasureProgress": "كيف نقيس التقدم",
+  "target": "الهدف"
+}

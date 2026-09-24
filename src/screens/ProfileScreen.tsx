@@ -1,6 +1,7 @@
 import { Feather } from '@expo/vector-icons';
 import { useTranslation } from 'react-i18next';
 import { I18nManager, Alert } from 'react-native';
+import * as Updates from 'expo-updates';
 import { useQueryClient } from '@tanstack/react-query';
 import { Pressable, StyleSheet, View, Switch } from 'react-native';
 import { usePatient, useProgram } from '@/api/queries';
@@ -27,18 +28,24 @@ function ProfileContent({ childId, navigation }: TabScreenProps<'Profile'> & { c
   const user = useAppSelector((s) => s.auth.user);
   const dispatch = useAppDispatch();
   const queryClient = useQueryClient();
-  const { t, i18n } = useTranslation();
+  const { t, i18n } = useTranslation('profile');
 
-  const handleLanguageChange = (lang: string) => {
-    void i18n.changeLanguage(lang);
+  const handleLanguageChange = async (lang: string) => {
+    await i18n.changeLanguage(lang);
     const isRTL = lang === 'ar';
+    I18nManager.allowRTL(isRTL);
     I18nManager.forceRTL(isRTL);
-    Alert.alert(
-      t('language'),
-      lang === 'ar' 
-        ? 'يرجى إعادة تشغيل التطبيق لتطبيق التغييرات.' 
-        : 'Please restart the app to apply layout changes.'
-    );
+    
+    try {
+      await Updates.reloadAsync();
+    } catch (error) {
+      Alert.alert(
+        t('language'),
+        lang === 'ar' 
+          ? 'يرجى إعادة تشغيل التطبيق بالكامل لتطبيق التغييرات.' 
+          : 'Please completely close and reopen the app to apply layout changes.'
+      );
+    }
   };
 
   if (patient.isPending) return <LoadingView />;
@@ -49,17 +56,17 @@ function ProfileContent({ childId, navigation }: TabScreenProps<'Profile'> & { c
   const links = [
     {
       icon: 'file-text' as const,
-      label: 'Assessment summary',
+      label: t('assessmentSummary'),
       onPress: () => navigation.navigate('Assessment'),
     },
     {
       icon: 'flag' as const,
-      label: 'Goals & milestones',
+      label: t('goalsAndMilestones'),
       onPress: () => navigation.navigate('Milestones'),
     },
     {
       icon: 'git-commit' as const,
-      label: 'Rehabilitation journey',
+      label: t('rehabilitationJourney'),
       onPress: () => navigation.navigate('Timeline'),
     },
   ];
@@ -70,7 +77,7 @@ function ProfileContent({ childId, navigation }: TabScreenProps<'Profile'> & { c
         <InitialsAvatar name={p.fullName} color={p.avatarColor} size={72} />
         <AppText variant="title">{p.fullName}</AppText>
         <AppText variant="body" color={colors.textSecondary}>
-          {p.age} years old · {p.gender === 'MALE' ? 'Boy' : 'Girl'}
+          {p.age} {t('yearsOld')} · {p.gender === 'MALE' ? t('boy') : t('girl')}
         </AppText>
         {p.specialty && (
           <View style={styles.chip}>
@@ -80,20 +87,20 @@ function ProfileContent({ childId, navigation }: TabScreenProps<'Profile'> & { c
       </View>
 
       <Card>
-        <InfoRow label="Diagnosis" value={p.diagnosis.name} />
-        <InfoRow label="Current specialty" value={p.specialty?.name ?? '—'} />
+        <InfoRow label={t('diagnosis')} value={p.diagnosis.name} />
+        <InfoRow label={t('currentSpecialty')} value={p.specialty?.name ?? '—'} />
         <InfoRow
-          label="Program"
+          label={t('program')}
           value={
             p.program
-              ? `${p.program.durationWeeks} weeks · week ${p.program.currentWeek}`
-              : 'Not started'
+              ? `${p.program.durationWeeks} ${t('weeks')} · ${t('week')} ${p.program.currentWeek}`
+              : t('notStarted')
           }
         />
-        <InfoRow label="Clinician" value={p.clinician.name} />
+        <InfoRow label={t('clinician')} value={p.clinician.name} />
       </Card>
 
-      <SectionHeader title="Rehabilitation goals" />
+      <SectionHeader title={t('rehabilitationGoals')} />
       <Card>
         {(program.data?.goals ?? []).map((g) => (
           <View key={g.id} style={styles.goal}>
@@ -126,10 +133,10 @@ function ProfileContent({ childId, navigation }: TabScreenProps<'Profile'> & { c
         ))}
       </Card>
 
-      <SectionHeader title="Caregiver" />
+      <SectionHeader title={t('caregiver')} />
       <Card>
-        <InfoRow label="Signed in as" value={user?.displayName ?? ''} />
-        <InfoRow label="Relationship" value={p.caregiver.relationship} />
+        <InfoRow label={t('signedInAs')} value={user?.displayName ?? ''} />
+        <InfoRow label={t('relationship')} value={p.caregiver.relationship} />
       </Card>
 
       <SectionHeader title={t('settings') || 'Settings'} />
@@ -149,7 +156,7 @@ function ProfileContent({ childId, navigation }: TabScreenProps<'Profile'> & { c
       </Card>
 
       <Button
-        title="Sign out"
+        title={t('signOut')}
         variant="secondary"
         icon="log-out"
         onPress={() => {
@@ -158,7 +165,7 @@ function ProfileContent({ childId, navigation }: TabScreenProps<'Profile'> & { c
         }}
       />
       <AppText variant="caption" color={colors.textMuted} style={styles.center}>
-        RehabX investor prototype · fictional demo data · not for clinical use
+        {t('prototypeDisclaimer')}
       </AppText>
     </Screen>
   );

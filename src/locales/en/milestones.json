@@ -1,0 +1,6 @@
+{
+  "noMilestonesYet": "No milestones yet",
+  "achievedOfTotal": "{{achieved}} of {{total}} achieved",
+  "weekOfDuration": "Week {{current}} of {{duration}} · {{name}}",
+  "weekUpper": "WEEK {{week}}"
+}

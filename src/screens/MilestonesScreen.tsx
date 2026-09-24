@@ -1,5 +1,6 @@
 import { Feather } from '@expo/vector-icons';
 import { StyleSheet, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { useMilestones } from '@/api/queries';
 import { useChild } from '@/api/useChild';
 import { AppText } from '@/components/AppText';
@@ -22,19 +23,20 @@ const dot: Record<
 
 export default function MilestonesScreen() {
   const { child } = useChild();
+  const { t } = useTranslation('milestones');
   const { data, isPending, error, refetch, isRefetching } = useMilestones(child?.id ?? '');
   if (isPending) return <LoadingView />;
   if (error) return <ErrorView error={error} onRetry={() => void refetch()} />;
-  if (!data.program) return <EmptyView icon="flag" title="No milestones yet" />;
+  if (!data.program) return <EmptyView icon="flag" title={t('noMilestonesYet')} />;
 
   return (
     <Screen edges={['bottom']} onRefresh={() => void refetch()} refreshing={isRefetching}>
       <View style={styles.summary}>
         <AppText variant="title">
-          {data.achieved} of {data.total} achieved
+          {t('achievedOfTotal', { achieved: data.achieved, total: data.total })}
         </AppText>
         <AppText variant="body" color={colors.textSecondary}>
-          Week {data.program.currentWeek} of {data.program.durationWeeks} · {data.program.name}
+          {t('weekOfDuration', { current: data.program.currentWeek, duration: data.program.durationWeeks, name: data.program.name })}
         </AppText>
         <ProgressBar
           value={(data.achieved / Math.max(1, data.total)) * 100}
@@ -63,7 +65,7 @@ export default function MilestonesScreen() {
               </View>
               <View style={[styles.card, m.status === 'IN_PROGRESS' && styles.current]}>
                 <AppText variant="micro" color={colors.textSecondary}>
-                  WEEK {m.targetWeek}
+                  {t('weekUpper', { week: m.targetWeek })}
                   {m.targetDate ? ` · ${formatDate(m.targetDate).toUpperCase()}` : ''}
                 </AppText>
                 <AppText variant="subheading">{m.title}</AppText>

@@ -46,6 +46,9 @@
           }
         }
       ]
-    ]
+    ],
+    "extra": {
+      "supportsRTL": true
+    }
   }
 }

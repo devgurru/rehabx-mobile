@@ -1,0 +1,12 @@
+{
+  "noAssessmentYet": "No assessment yet",
+  "diagnosisUpper": "DIAGNOSIS",
+  "assessedAtBy": "Assessed {{date}} by {{name}}",
+  "startingPoint": "Starting point",
+  "howWasDoingAtFirstAssessment": "How {{name}} was doing at the first assessment (0–100)",
+  "whatTheyCanDo": "What they can do",
+  "thingsToWatch": "Things to watch",
+  "goals": "Goals",
+  "howWeMeasureProgress": "How we measure progress",
+  "target": "target"
+}

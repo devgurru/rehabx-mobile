@@ -1,5 +1,6 @@
 import { Feather } from '@expo/vector-icons';
 import { StyleSheet, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { useTimeline } from '@/api/queries';
 import { useChild } from '@/api/useChild';
 import { AppText } from '@/components/AppText';
@@ -21,10 +22,11 @@ const ICONS: Record<TimelineEventType, keyof typeof Feather.glyphMap> = {
 
 export default function TimelineScreen() {
   const { child } = useChild();
+  const { t } = useTranslation('timeline');
   const { data, isPending, error, refetch, isRefetching } = useTimeline(child?.id ?? '');
   if (isPending) return <LoadingView />;
   if (error) return <ErrorView error={error} onRetry={() => void refetch()} />;
-  if (!data.length) return <EmptyView icon="git-commit" title="No activity yet" />;
+  if (!data.length) return <EmptyView icon="git-commit" title={t('noActivityYet')} />;
 
   return (
     <Screen edges={['bottom']} onRefresh={() => void refetch()} refreshing={isRefetching}>
@@ -40,10 +42,10 @@ export default function TimelineScreen() {
             {i < data.length - 1 && <View style={styles.line} />}
           </View>
           <View style={styles.body}>
-            <AppText variant="bodyStrong">{e.title}</AppText>
+            <AppText variant="bodyStrong">{t(e.title)}</AppText>
             {e.description && (
               <AppText variant="caption" color={colors.textSecondary}>
-                {e.description}
+                {t(e.description)}
               </AppText>
             )}
           </View>

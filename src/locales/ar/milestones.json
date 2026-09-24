@@ -1,0 +1,6 @@
+{
+  "noMilestonesYet": "لا توجد أهداف ومراحل بعد",
+  "achievedOfTotal": "تم تحقيق {{achieved}} من {{total}}",
+  "weekOfDuration": "الأسبوع {{current}} من {{duration}} · {{name}}",
+  "weekUpper": "الأسبوع {{week}}"
+}

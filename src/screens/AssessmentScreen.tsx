@@ -1,5 +1,6 @@
 import { Feather } from '@expo/vector-icons';
 import { StyleSheet, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 import { useAssessment, usePatientKpis, useProgram } from '@/api/queries';
 import { useChild } from '@/api/useChild';
 import { AppText } from '@/components/AppText';
@@ -20,34 +21,36 @@ export default function AssessmentScreen() {
   const kpis = usePatientKpis(id);
   const program = useProgram(id);
 
+  const { t } = useTranslation('assessment');
+
   if (assessment.isPending) return <LoadingView />;
   if (assessment.error)
     return <ErrorView error={assessment.error} onRetry={() => void assessment.refetch()} />;
   const a = assessment.data.baseline ?? assessment.data.latest;
-  if (!a) return <EmptyView icon="file-text" title="No assessment yet" />;
+  if (!a) return <EmptyView icon="file-text" title={t('noAssessmentYet')} />;
 
   return (
     <Screen edges={['bottom']}>
       <Card>
         <AppText variant="micro" color={colors.textSecondary}>
-          DIAGNOSIS
+          {t('diagnosisUpper')}
         </AppText>
         <AppText variant="heading">{child?.diagnosis.name}</AppText>
         <AppText variant="body" color={colors.textSecondary}>
           {a.summary}
         </AppText>
         <AppText variant="caption" color={colors.textMuted}>
-          Assessed {formatDate(a.assessedAt)} by {a.assessedBy}
+          {t('assessedAtBy', { date: formatDate(a.assessedAt), name: a.assessedBy })}
         </AppText>
         {a.recommendedSpecialty && (
           <SpecialtyChip name={a.recommendedSpecialty.name} color={a.recommendedSpecialty.color} />
         )}
       </Card>
 
-      <SectionHeader title="Starting point" />
+      <SectionHeader title={t('startingPoint')} />
       <Card>
         <AppText variant="caption" color={colors.textSecondary}>
-          How {child?.firstName} was doing at the first assessment (0–100)
+          {t('howWasDoingAtFirstAssessment', { name: child?.firstName ?? '' })}
         </AppText>
         {a.domains
           .filter((d) => d.score !== null)
@@ -64,7 +67,7 @@ export default function AssessmentScreen() {
 
       {a.currentAbilities && (
         <>
-          <SectionHeader title="What they can do" />
+          <SectionHeader title={t('whatTheyCanDo')} />
           <Card>
             <AppText variant="body">{a.currentAbilities}</AppText>
           </Card>
@@ -75,13 +78,13 @@ export default function AssessmentScreen() {
         <View style={styles.riskHead}>
           <Feather name="shield" size={18} color={colors.warning} />
           <AppText variant="subheading" color={colors.warning}>
-            Things to watch
+            {t('thingsToWatch')}
           </AppText>
         </View>
         <AppText variant="body">{a.riskNotes}</AppText>
       </View>
 
-      <SectionHeader title="Goals" />
+      <SectionHeader title={t('goals')} />
       <Card>
         {(program.data?.goals ?? []).map((g) => (
           <View key={g.id} style={styles.goal}>
@@ -91,7 +94,7 @@ export default function AssessmentScreen() {
         ))}
       </Card>
 
-      <SectionHeader title="How we measure progress" />
+      <SectionHeader title={t('howWeMeasureProgress')} />
       <Card>
         {kpis.data?.map((k) => (
           <View key={k.id} style={styles.measure}>
@@ -99,7 +102,7 @@ export default function AssessmentScreen() {
               {k.kpi.name}
             </AppText>
             <AppText variant="caption" color={colors.textSecondary}>
-              {Math.round(k.baseline)}% → target {Math.round(k.target)}%
+              {Math.round(k.baseline)}% → {t('target')} {Math.round(k.target)}%
             </AppText>
           </View>
         ))}
