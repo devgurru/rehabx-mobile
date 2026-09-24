@@ -29,5 +29,8 @@
   "In progress": "In progress",
   "Not started": "Not started",
   "Achieved": "Achieved",
-  "Upcoming": "Upcoming"
+  "Upcoming": "Upcoming",
+  "tabHome": "Home",
+  "tabExercises": "Exercises",
+  "tabProgress": "Progress"
 }

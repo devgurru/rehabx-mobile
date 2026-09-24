@@ -29,5 +29,8 @@
   "In progress": "قيد الإنجاز",
   "Not started": "لم يبدأ",
   "Achieved": "تم الإنجاز",
-  "Upcoming": "قادم"
+  "Upcoming": "قادم",
+  "tabHome": "الرئيسية",
+  "tabExercises": "التمارين",
+  "tabProgress": "التقدم"
 }

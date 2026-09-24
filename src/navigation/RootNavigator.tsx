@@ -45,11 +45,11 @@ function MainTabs() {
         ),
       })}
     >
-      <Tabs.Screen name="Home" component={HomeScreen} />
-      <Tabs.Screen name="Program" component={ProgramScreen} options={{ title: t('plan') || 'Plan' }} />
-      <Tabs.Screen name="Exercises" component={ExercisesScreen} />
-      <Tabs.Screen name="Progress" component={ProgressScreen} />
-      <Tabs.Screen name="Profile" component={ProfileScreen} />
+      <Tabs.Screen name="Home" component={HomeScreen} options={{ tabBarLabel: t('tabHome') || 'Home' }} />
+      <Tabs.Screen name="Program" component={ProgramScreen} options={{ tabBarLabel: t('plan') || 'Plan', title: t('plan') || 'Plan' }} />
+      <Tabs.Screen name="Exercises" component={ExercisesScreen} options={{ tabBarLabel: t('tabExercises') || 'Exercises' }} />
+      <Tabs.Screen name="Progress" component={ProgressScreen} options={{ tabBarLabel: t('tabProgress') || 'Progress' }} />
+      <Tabs.Screen name="Profile" component={ProfileScreen} options={{ tabBarLabel: t('profile') || 'Profile' }} />
     </Tabs.Navigator>
   );
 }
