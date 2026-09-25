@@ -149,6 +149,30 @@ function HomeContent({ childId, navigation }: TabScreenProps<'Home'> & { childId
       )}
 
       <SectionHeader
+        title={t('upcomingSession')}
+      />
+      <Card>
+        <View style={styles.rowGap}>
+          <View style={[styles.iconTile, { backgroundColor: colors.primarySoft }]}>
+            <Feather name="video" size={20} color={colors.primary} />
+          </View>
+          <View style={styles.flex}>
+            <AppText variant="caption" color={colors.textSecondary}>
+              {t('sessionWith', { clinician: p.clinician.name })}
+            </AppText>
+            <AppText variant="subheading">{t('sessionLabel')}</AppText>
+            <AppText variant="caption" color={colors.textSecondary}>
+              {t('sessionSpecialty', { specialty: p.specialty?.name ? t(p.specialty.name) : t('physio') })}
+            </AppText>
+          </View>
+          <View style={styles.sessionBadge}>
+            <Feather name="clock" size={12} color={colors.primary} />
+            <AppText variant="micro" color={colors.primary}>{t('sessionTime')}</AppText>
+          </View>
+        </View>
+      </Card>
+
+      <SectionHeader
         title={t('progressAtAGlance')}
         action={t('seeAll')}
         onAction={() => navigation.navigate('Main', { screen: 'Progress' })}
@@ -247,5 +271,14 @@ const styles = StyleSheet.create({
     borderRadius: radius.pill,
     paddingHorizontal: spacing.sm,
     paddingVertical: 2,
+  },
+  sessionBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    backgroundColor: colors.primarySoft,
+    borderRadius: radius.pill,
+    paddingHorizontal: spacing.sm,
+    paddingVertical: 4,
   },
 });

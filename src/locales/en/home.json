@@ -20,6 +20,12 @@
   "currentProgram": "Current program",
   "notStarted": "Not started",
   "sessionsWithClinician": "{{sessions}} sessions per week · with {{clinician}}",
+  "upcomingSession": "Upcoming session",
+  "sessionWith": "With {{clinician}}",
+  "sessionLabel": "Tomorrow · 10:00 AM",
+  "sessionTime": "Tomorrow",
+  "sessionSpecialty": "{{specialty}} session",
+  "physio": "Physiotherapy",
 
   "Spastic Diplegia": "Spastic Diplegia"
 }

@@ -1,7 +1,7 @@
 import { Feather } from '@expo/vector-icons';
 import * as Haptics from 'expo-haptics';
 import { useCallback, useEffect, useRef } from 'react';
-import { Platform, Pressable, StyleSheet, View } from 'react-native';
+import { Platform, Pressable, StyleSheet, View, Animated } from 'react-native';
 import { useTranslation } from 'react-i18next';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useCompleteExercise, useStartExercise, useTodayExercises } from '@/api/queries';
@@ -66,6 +66,17 @@ export default function ExerciseSessionScreen({
   }, [session.running, dispatch]);
 
   useEffect(() => () => void dispatch(sessionEnded()), [dispatch]);
+
+  // Pulsing animation for the AI dot
+  const pulseAnim = useRef(new Animated.Value(0.3)).current;
+  useEffect(() => {
+    Animated.loop(
+      Animated.sequence([
+        Animated.timing(pulseAnim, { toValue: 1, duration: 800, useNativeDriver: true }),
+        Animated.timing(pulseAnim, { toValue: 0.3, duration: 800, useNativeDriver: true }),
+      ])
+    ).start();
+  }, [pulseAnim]);
 
   // Frame callback from the 3D coach — only dispatch when something visible changes.
   const lastReps = useRef(0);
@@ -145,7 +156,7 @@ export default function ExerciseSessionScreen({
           <Feather name="x" size={22} color={colors.text} />
         </Pressable>
         <View style={styles.aiPill}>
-          <View style={styles.liveDot} />
+          <Animated.View style={[styles.liveDot, { opacity: pulseAnim }]} />
           <AppText variant="caption" color={colors.primaryDark}>
             {t('aiCoachSimulated')}
           </AppText>

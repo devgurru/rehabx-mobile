@@ -20,6 +20,12 @@
   "currentProgram": "البرنامج الحالي",
   "notStarted": "لم يبدأ",
   "sessionsWithClinician": "{{sessions}} جلسات في الأسبوع · مع {{clinician}}",
+  "upcomingSession": "الجلسة القادمة",
+  "sessionWith": "مع {{clinician}}",
+  "sessionLabel": "غداً · الساعة 10:00 صباحاً",
+  "sessionTime": "غداً",
+  "sessionSpecialty": "جلسة {{specialty}}",
+  "physio": "العلاج الطبيعي",
 
   "Spastic Diplegia": "الشلل المزدوج التشنجي"
 }

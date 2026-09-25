@@ -27,8 +27,9 @@ export function TrendLine({
 }) {
   const { width, onLayout } = useWidth();
   const pad = 6;
-  const lo = Math.max(0, Math.min(...values, target) - 5);
-  const hi = Math.min(100, Math.max(...values, target) + 5);
+  const baseline = values[0] ?? 0;
+  const lo = Math.max(0, Math.min(...values, target, baseline) - 5);
+  const hi = Math.min(100, Math.max(...values, target, baseline) + 5);
   const x = (i: number) => pad + (i / Math.max(1, values.length - 1)) * (width - pad * 2);
   const y = (v: number) => pad + (1 - (v - lo) / Math.max(1, hi - lo)) * (height - pad * 2);
   const d = values
@@ -43,14 +44,25 @@ export function TrendLine({
       importantForAccessibility="no-hide-descendants"
     >
       <Svg width={width} height={height}>
+        {/* Baseline Line */}
+        <Line
+          x1={pad}
+          x2={width - pad}
+          y1={y(baseline)}
+          y2={y(baseline)}
+          stroke={colors.textMuted}
+          strokeDasharray="4 4"
+          strokeWidth={1.5}
+        />
+        {/* Target Line */}
         <Line
           x1={pad}
           x2={width - pad}
           y1={y(target)}
           y2={y(target)}
-          stroke={colors.textMuted}
+          stroke={colors.success}
           strokeDasharray="4 4"
-          strokeWidth={1}
+          strokeWidth={1.5}
         />
         <Path
           d={d}
